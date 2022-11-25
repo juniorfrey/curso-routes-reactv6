@@ -1,0 +1,11 @@
+.active {
+    color: red;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.inactive{
+    color: cadetblue;
+    font-weight: bold;
+    text-decoration: none;
+}
