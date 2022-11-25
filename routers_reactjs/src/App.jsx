@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
 
 //Import Pages
 import ContactoPage from './pages/ContactoPage';
@@ -10,17 +11,36 @@ import NotFoundPage from './pages/NotFoundPage';
 import UserPages from './pages/UserPages';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
+
+  const login = () => {
+      setUser({
+        id:1,
+        name:'Fredy'
+      })
+  }
+
+  const logout =() => {
+    setUser(null);
+  }
 
   return (
     <BrowserRouter className="App">
       <Navbar />
 
+      {user ? (
+        <button onClick={logout}>Salir</button>
+      ) : (
+        <button onClick={login}>Entrar</button>
+      )}
+
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard/*" element={<DashboardPage />}>
-          <Route path="welcome" element={<div>WELCOME !!!</div>} />
-          <Route path="goodby" element={<div>GOOG BY !!!</div>} />
+        <Route element={<ProtectedRoute user={user} />} >
+          <Route path="/dashboard/*" element={<DashboardPage />}>
+            <Route path="welcome" element={<div>WELCOME !!!</div>} />
+            <Route path="goodby" element={<div>GOOG BY !!!</div>} />
+          </Route>
         </Route>
         <Route path="/contacto" element={<ContactoPage />} />
         <Route path="/usuarios" element={<Navigate to="/contacto" />} />

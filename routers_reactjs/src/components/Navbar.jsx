@@ -21,14 +21,14 @@ const Navbar = () => {
             Contacto
           </NavLink>
         </li>
-        {/* <li>
+        <li>
           <NavLink
             to="/dashboard"
             className={({ isActive }) => (isActive ? "active" : "inactive")}
           >
             Dashboard
           </NavLink>
-        </li> */}
+        </li>
       </ul>
     </div>
   );

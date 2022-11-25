@@ -2,6 +2,7 @@ import { useNavigate, Link, Outlet } from "react-router-dom";
 
 const DashboardPage = () => {
     const navigate = useNavigate();
+
   const handleClick = () => {
     navigate('/');
   };
