@@ -18,7 +18,10 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard/*" element={<DashboardPage />} />
+        <Route path="/dashboard/*" element={<DashboardPage />}>
+          <Route path="welcome" element={<div>WELCOME !!!</div>} />
+          <Route path="goodby" element={<div>GOOG BY !!!</div>} />
+        </Route>
         <Route path="/contacto" element={<ContactoPage />} />
         <Route path="/usuarios" element={<Navigate to="/contacto" />} />
         <Route path="/users/:id" element={<UserPages />} />
