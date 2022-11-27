@@ -16,7 +16,8 @@ function App() {
   const login = () => {
       setUser({
         id:1,
-        name:'Fredy'
+        name:'Fredy',
+        permiso: ['analisis'],
       })
   }
 
@@ -36,13 +37,20 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route element={<ProtectedRoute user={user} />} >
+        <Route element={<ProtectedRoute isAllowed={!!user} />} >
           <Route path="/dashboard/*" element={<DashboardPage />}>
             <Route path="welcome" element={<div>WELCOME !!!</div>} />
             <Route path="goodby" element={<div>GOOG BY !!!</div>} />
           </Route>
         </Route>
-        <Route path="/contacto" element={<ContactoPage />} />
+        <Route path="/contacto" element={
+          <ProtectedRoute 
+                isAllowed={!!user && user.permiso.includes('analisis')}
+                redirectTo="/dashboard"
+                > 
+            <ContactoPage />
+          </ProtectedRoute>
+        } />
         <Route path="/usuarios" element={<Navigate to="/contacto" />} />
         <Route path="/users/:id" element={<UserPages />} />
         <Route path="*" element={<NotFoundPage />} />

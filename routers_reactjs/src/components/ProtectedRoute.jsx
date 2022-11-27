@@ -1,9 +1,9 @@
 
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = ({children, user, redirectTo="/"}) => {
+const ProtectedRoute = ({children, isAllowed, redirectTo="/"}) => {
 
-  if(!user){
+  if(!isAllowed){
     return <Navigate to={redirectTo} />;
   }
 
