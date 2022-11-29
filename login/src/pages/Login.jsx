@@ -14,12 +14,18 @@ const Login = () => {
     if(users.user === 'fredys' && users.password === '1234'){
         setMensaje(true);
         window.location.href = './home';
+        sessionStorage.setItem("item_key", users.user);
     }else{
         setMensaje(false);
     }
-    //console.log(setUsers);
   }
 
+  const setCampos = () => {
+        setUsers({
+          user: "fredys",
+          password: "1234",
+        });
+  }
   
 
   return (
@@ -48,12 +54,12 @@ const Login = () => {
         <br />
         <button>Entrar</button>
       </form>
-      { !mensaje ? (
+      <button onClick={setCampos}>setCampos</button>
+      {!mensaje ? (
         <p style={{ color: "red" }}>Credenciales invalidas</p>
       ) : (
         <p style={{ color: "blue" }}>Credenciales correctas</p>
       )}
-
     </div>
   );
 };
