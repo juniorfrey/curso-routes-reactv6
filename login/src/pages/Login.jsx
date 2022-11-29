@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const Login = () => {
   const [users, setUsers] = useState({
     user:'',
@@ -7,6 +7,16 @@ const Login = () => {
 
   const [mensaje, setMensaje] = useState(false)
 
+
+  useEffect(() => {
+    var user = sessionStorage.getItem("item_key");
+
+    return () => {
+      if (user) {
+        window.location.href = "./home";
+      }
+    };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

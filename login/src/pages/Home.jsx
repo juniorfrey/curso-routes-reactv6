@@ -6,12 +6,12 @@ const Home = () => {
       var user = sessionStorage.getItem("item_key");
 
       return () => {
-        if (user == null) {
+        if (!user) {
           window.location.href = "./";
         }
       };
     }, []);
-    
+
 
     const cerrar = () => {
         sessionStorage.removeItem("item_key");
