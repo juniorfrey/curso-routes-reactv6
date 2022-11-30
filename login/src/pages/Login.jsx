@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 const Login = () => {
   const [users, setUsers] = useState({
     user:'',
@@ -9,7 +10,7 @@ const Login = () => {
 
 
   useEffect(() => {
-    var user = sessionStorage.getItem("item_key");
+    var user = sessionStorage.getItem("token_key");
 
     return () => {
       if (user) {
@@ -21,13 +22,34 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(users);
-    if(users.user === 'fredys' && users.password === '1234'){
-        setMensaje(true);
-        window.location.href = './home';
-        sessionStorage.setItem("item_key", users.user);
-    }else{
+
+   Object.keys(users).forEach((user) => {
+    if (!users[user].trim()) {
         setMensaje(false);
+    } else {
+         
+        let url_base = 'http://localhost:5000/login';
+        let resp = '';
+        const json = { email: users.user, password: users.password };
+        axios .post(url_base, {
+            params:{
+                json
+            }
+        })
+        .then((response) => {
+                console.log(response.data);
+                resp = response.data.token;
+                sessionStorage.setItem("token_key", response.data.token);
+                sessionStorage.setItem("user", response.data.datas.user);
+                window.location.href = './home';
+                setMensaje(true);
+        }).catch(function (error) {
+                console.log(error);
+                setMensaje(false);
+        });
     }
+   });
+
   }
 
   const setCampos = () => {
@@ -48,6 +70,7 @@ const Login = () => {
           placeholder="Usuario"
           onChange={(e) => setUsers({ ...users, user: e.target.value })}
           value={users.user}
+          name="user"
         />
         <br />
         <br />
@@ -58,6 +81,7 @@ const Login = () => {
           placeholder="Password"
           onChange={(e) => setUsers({ ...users, password: e.target.value })}
           value={users.password}
+          name="pass"
         />
         <br />
         <br />
