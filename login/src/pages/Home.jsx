@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
+import jwt from "jwt-decode";
+import { VscAccount, VscPass, VscSignIn } from "react-icons/vsc";
 import "moment/locale/es"; // without this line it didn't work
 moment.locale("es");
 
@@ -8,18 +10,40 @@ const Home = () => {
 
     const [proyectos, setProyectos] = useState([]);
     const [tareas, setTareas] = useState([]);
+    const [session, setSession] = useState(true);
     const [nombreProyecto, setNombreProyecto] = useState('');
 
     useEffect(() => {
-      var user = sessionStorage.getItem("token_key");
-      console.log(!user);
-      if (!user) {
+     
+      //let exp;
+      //let decode;
+      console.log(sessionStorage.getItem("token_key"));
+      console.log(sessionStorage.getItem("token_key") != null ? setSession(false) : setSession(true));
+      sessionStorage.getItem("token_key") != null ? setSession(false) : setSession(true);
+        
+      //}
+      console.log(session);
+      
+      /* if(session){
         window.location.href = "./";
-      }
-      getProyectos();
-      return () => {
-      };
-    }, []);
+        cerrar();
+      } */
+      
+       getProyectos();
+      const interval = setInterval(() => {
+        let decode = jwt(sessionStorage.getItem("token_key"));
+        let exp = decode.exp < Date.now() / 1000;
+        if (exp) {
+          cerrar();
+          //setSession(true);
+        }
+      }, 2000);
+      
+      
+     return () => clearInterval(interval); 
+     
+    },[]);
+    
 
     const getProyectos = () => {
         let url = `http://localhost:5000/proyectos`;
@@ -48,7 +72,7 @@ const Home = () => {
           });
     }
     
-
+    
 
     const cerrar = () => {
         sessionStorage.removeItem("token_key");
@@ -59,7 +83,10 @@ const Home = () => {
   return (
     <div>
       <h3 style={{ color: "#26C6DA", fontFamily: "Arial" }}>
-        USUARIO: {sessionStorage.getItem("user") ? sessionStorage.getItem("user").toUpperCase() : ''}
+        <VscAccount /> USUARIO:{" "}
+        {sessionStorage.getItem("user")
+          ? sessionStorage.getItem("user").toUpperCase()
+          : ""}
       </h3>
       <br />
       <br />
@@ -69,14 +96,15 @@ const Home = () => {
           backgroundColor: "transparent",
           border: "2px solid #F44336",
           padding: "10px 10px 10px 10px",
-          width: "150px",
+          width: "170px",
           fontFamily: "Arial",
           color: "#F44336",
           borderRadius: "6px",
           cursor: "pointer",
+          fontSize:'13px'
         }}
       >
-        CERRAR SESSIÓN
+        <VscSignIn style={{fontSize:'13px'}} /> CERRAR SESSIÓN
       </button>
       <br />
       <br />
@@ -102,7 +130,6 @@ const Home = () => {
               {proyecto.descripcion.toUpperCase()}
               <small
                 style={{
-                  color: " white",
                   fontSize: "12px",
                   marginLeft: "10px",
                   color: "#26C6DA",
@@ -125,13 +152,12 @@ const Home = () => {
               }}
               onClick={() => verTareas(proyecto.id, proyecto.nombre)}
             >
-              VER TAREAS
+              <VscPass /> VER TAREAS
             </button>
             <button
               style={{
                 background: "transparent",
                 border: "2px solid #F44336",
-                color: "#26C6DA",
                 borderRadius: "5px",
                 padding: "8px",
                 boxSizing: "border-box",

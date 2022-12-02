@@ -21,7 +21,6 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(users);
 
    Object.keys(users).forEach((user) => {
     if (!users[user].trim()) {
@@ -37,7 +36,6 @@ const Login = () => {
             }
         })
         .then((response) => {
-                console.log(response.data);
                 resp = response.data.token;
                 sessionStorage.setItem("token_key", response.data.token);
                 sessionStorage.setItem("user", response.data.datas.user);
