@@ -10,36 +10,23 @@ const Home = () => {
 
     const [proyectos, setProyectos] = useState([]);
     const [tareas, setTareas] = useState([]);
-    const [session, setSession] = useState(true);
+    const [token, setToken] = useState(sessionStorage.getItem("token_key"));
     const [nombreProyecto, setNombreProyecto] = useState('');
 
-    useEffect(() => {
-     
-      //let exp;
-      //let decode;
-      console.log(sessionStorage.getItem("token_key"));
-      console.log(sessionStorage.getItem("token_key") != null ? setSession(false) : setSession(true));
-      sessionStorage.getItem("token_key") != null ? setSession(false) : setSession(true);
-        
-      //}
-      console.log(session);
-      
-      /* if(session){
-        window.location.href = "./";
-        cerrar();
-      } */
-      
-       getProyectos();
+    useEffect(() => {   
+      if(!token){
+        window.location.href = "./"
+      }
+
+      getProyectos();
       const interval = setInterval(() => {
-        let decode = jwt(sessionStorage.getItem("token_key"));
+        let decode = jwt(token);
         let exp = decode.exp < Date.now() / 1000;
         if (exp) {
           cerrar();
-          //setSession(true);
+          setToken(true);
         }
       }, 2000);
-      
-      
      return () => clearInterval(interval); 
      
     },[]);
